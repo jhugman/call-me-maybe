@@ -6,13 +6,15 @@ module.exports = function(grunt){
             .loadRules('./config/server-facets.js')
             .loadConfiguration('./config/build-config.js');
 
+  var themeFile = conf.get('theme');
 
   grunt.initConfig({
     dist: {
       build: 'build',
       assemble: 'build/assemble',
       dir: conf.resolve('project-dir', 'dist-relative'),
-      assets: conf.resolve('project-dir', 'dist-relative', 'assets-relative') 
+      assets: conf.resolve('project-dir', 'dist-relative', 'assets-relative'),
+      theme: themeFile
     },
 
     jshint: {
@@ -42,7 +44,7 @@ module.exports = function(grunt){
         files: {
           // should use '<%=dist.build%>'
           // the rest of the modules will be lazily discovered.
-          'build/assemble/app.min.js': ['client/lib/*.js']
+          'build/assemble/app.min.js': ['client/lib/entry/*.js']
         }
       },
       options: {
@@ -52,9 +54,9 @@ module.exports = function(grunt){
 
     stylus: {
       compile: {
-        paths: ['style'],
+        paths: ['client/style'],
         files: {
-          'build/assemble/style.css': 'client/style/main.styl'
+          'build/assemble/style.css': [themeFile]
         }
       }
     },
