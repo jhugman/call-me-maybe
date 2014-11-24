@@ -12,6 +12,7 @@ module.exports = function(grunt){
       build: 'build',
       assemble: 'build/assemble',
       dir: conf.resolve('project-dir', 'dist-relative'),
+      assets: conf.resolve('project-dir', 'dist-relative', 'assets-relative') 
     },
 
     jshint: {
@@ -41,7 +42,7 @@ module.exports = function(grunt){
         files: {
           // should use '<%=dist.build%>'
           // the rest of the modules will be lazily discovered.
-          'build/assemble/call-me-maybe.min.js': ['client/lib/*.js']
+          'build/assemble/app.min.js': ['client/lib/*.js']
         }
       },
       options: {
@@ -71,12 +72,12 @@ module.exports = function(grunt){
     copy: {
       client: {
         files: [
-          { expand: true, dot: true, cwd: 'build/assemble', src: [ '**' ], dest: '<%=dist.dir%>' },
-          { flatten: false, expand: true, cwd: 'resources', src: conf.get('resources-common'), dest: '<%=dist.dir%>' },
-          { flatten: false, expand: true, cwd: 'resources', src: conf.get('resources-specific'), dest: '<%=dist.dir%>' },
+          { expand: true, dot: true, cwd: 'build/assemble', src: [ '**' ], dest: '<%=dist.assets%>' },
+          { flatten: false, expand: true, cwd: 'resources', src: conf.get('resources-common'), dest: '<%=dist.assets%>' },
+          { flatten: false, expand: true, cwd: 'resources', src: conf.get('resources-specific'), dest: '<%=dist.assets%>' },
           
           //{ flatten: true, expand: true, src: ['node_modules/x-tag-core/dist/x-tag-core.js'], dest: '<%=dist.dir%>' },
-          { flatten: true, expand: true, src: ['views/*'], dest: '<%=dist.dir%>', filter: 'isFile' },
+          { flatten: true, expand: true, src: ['views/*'], dest: '<%=dist.dir%>/views', filter: 'isFile' },
         ]
       },
       cordova: {       
@@ -116,7 +117,7 @@ module.exports = function(grunt){
           '<%= jshint.server %>',
           'lib/**/*.js',
           'test/**/*.js',
-          '**/*.html',
+          'views/*.html',
         ],
         tasks: ['build-server']
       },
@@ -159,7 +160,7 @@ module.exports = function(grunt){
           '*.js',
           '*.css'
         ],
-        dest: '<%=dist.dir%>/manifest.appcache'
+        dest: '<%=dist.assets%>/manifest.appcache'
       }
     },
 

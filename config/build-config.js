@@ -5,6 +5,9 @@ module.exports = {
   'dist-relative': {
     '': 'build/dist',
   },
+  'assets-relative': {
+    '': 'assets',
+  },
   'run-command': {
     '': 'echo "localhost already running"'
   },
