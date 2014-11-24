@@ -4,5 +4,9 @@ module.exports = {
     'yammer': '8081',
     'facebook': '8082'
   },
-  'bind-address': 'localhost'
+  'bind-address': 'localhost',
+
+  'namespace-specific': {
+    yammer: 'yammer.js'
+  }
 }

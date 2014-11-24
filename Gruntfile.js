@@ -3,6 +3,7 @@
 
 module.exports = function(grunt){
   var conf = require('build-facets')(__dirname)
+            .loadRules('./config/server-facets.js')
             .loadConfiguration('./config/build-config.js');
 
 
@@ -74,7 +75,7 @@ module.exports = function(grunt){
           { flatten: false, expand: true, cwd: 'resources', src: conf.get('resources-common'), dest: '<%=dist.dir%>' },
           { flatten: false, expand: true, cwd: 'resources', src: conf.get('resources-specific'), dest: '<%=dist.dir%>' },
           
-          { flatten: true, expand: true, src: ['node_modules/x-tag-core/dist/x-tag-core.js'], dest: '<%=dist.dir%>' },
+          //{ flatten: true, expand: true, src: ['node_modules/x-tag-core/dist/x-tag-core.js'], dest: '<%=dist.dir%>' },
           { flatten: true, expand: true, src: ['views/*'], dest: '<%=dist.dir%>', filter: 'isFile' },
         ]
       },
