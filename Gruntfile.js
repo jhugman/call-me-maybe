@@ -98,7 +98,7 @@ module.exports = function(grunt){
     nodemon: {
       dev: {
         script: './lib/app.js',
-        watch: 'lib/**'
+        watch: ['lib/**', '!client/**']
       }
     },
 
@@ -110,7 +110,8 @@ module.exports = function(grunt){
         files: [
           '<%= jshint.client %>',
           'client/**/*.html',
-          'client/**/*.styl'
+          'client/**/*.styl',
+          'views/**/*.html',
         ],
         tasks: ['build-client']
       },

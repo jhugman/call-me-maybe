@@ -1,0 +1,53 @@
+///////////////////////////////////////////////////////////////////////////////////////////////
+// Button mixins that describe generic enablement behaviour
+///////////////////////////////////////////////////////////////////////////////////////////////
+button-disabled-style() {
+//  background: $bg-button-disabled;
+//  border: $border-button-disabled;
+//  color: $text-muted;
+}
+
+button-enabled-syle(background-color, color) {
+//  border: $border;
+  color: color;
+  background-color: background-color;
+}
+
+button-disabled() {
+  pointer-events: none;
+  button-disabled-style();
+}
+
+button-enabled(background-color, color=text-button) {
+  display: block;
+  pointer-events: auto;
+  button-enabled-syle(background-color, color);
+}
+
+always-on-button(class, bg-color = bg-button, color = text-button)
+  button.{class}
+    button-enabled(bg-color, color);
+
+on-off-button(class, bg-color = bg-button, color = text-button)
+  & button.{class}
+    button-disabled();
+  &.{class} button.{class}
+    button-enabled(bg-color, color);
+
+on-hide-button(class, bg-color = bg-button, color = text-color)
+  &.{class} button.{class}
+    button-enabled(bg-color, color);
+  & button.{class}
+    display: none;
+
+show-hide(class)
+  &.{class} .{class}
+    display: block;
+  & .{class}
+    display: none;
+
+
+states = loggedOut, loggedIn
+#state
+  for s in states
+    show-hide(s);

@@ -6,7 +6,7 @@ module.exports = {
   },
   'bind-address': 'localhost',
 
-  'namespace-specific': {
-    yammer: 'yammer.js'
+  'namespace-config': {
+    yammer: './config/yammer.js'
   }
 }
