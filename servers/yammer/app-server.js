@@ -1,6 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
+var _ = require('lodash'),
+    connUtils = require('../../lib/connection-utils');
 
 function Server (app, config) {
   this._app = app;
@@ -14,8 +15,15 @@ _.extend(Server.prototype, {
   },
 
   connector: function (device, callObject, recommendation, reply) {
-    console.log("We're connecting");
-    reply(undefined, "CONNECTING:" + device);
+    var connections = {
+      'connect': Server.prototype._connectByWebSocket.bind(this)
+    };
+
+    connUtils.connect(device, connections, callObject, recommendation, reply);
+  },
+
+  _connectByWebSocket: function (callObject, reply) {
+    reply('not logged in');
   }
 
 });

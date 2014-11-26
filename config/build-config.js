@@ -22,7 +22,8 @@ module.exports = {
   },
 
   'theme': {
-    'yammer': 'client/style/yammer-theme.styl'
+    'yammer': 'client/style/yammer-theme.styl',
+    'owncloud': 'client/style/yammer-theme.styl',
   },
 
   // grunt tasks we call depending on build variant.

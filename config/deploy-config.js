@@ -1,10 +1,9 @@
 module.exports = {
-  'server-port': {
-    'mozilla': '8080',
-    'yammer': '8081',
-    'owncloud': '8082'
-  },
   'bind-address': 'localhost',
+
+  'dataModule': 'data.js',
+  'appModule': 'app-server.js',
+  'basic-info': 'info.js',
 
   'namespace-dir': {
     yammer: './servers/yammer',
