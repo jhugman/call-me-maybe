@@ -16,8 +16,8 @@ module.exports = {
                .or(they.areMemberOf('Mozilla Executives'), 'high')
                .or(they.areMemberOf('PDX Stickers'), 'medium')
 
-               .connect('high')
-               .forward('medium');
+               .connectIf('high')
+               .forwardIf('medium');
       },
     },
 

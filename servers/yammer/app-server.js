@@ -51,23 +51,50 @@ _.extend(Server.prototype, {
       // Web sockets stuff
     /*********************************************************************/
   
+    // XXX Hacky as anything
+    var sockets = {};
 
     io.on('connection', function(socket){
 
+      var calleeId, counterId;
+      var pingStart, pingEnd;
+
+      sockets[socket.id] = socket;
+
+      function startPing () {
+        counterId = setInterval(function () {
+          pingStart = Date.now();
+          socket.emit('ping');
+        }, 10 * 1000);
+      }
+
       socket.on('listening_for_calls', function (calleeObject) {
-        console.log('Available for connections  : ' + calleeObject.calleeId);
-        self._connections[calleeObject.calleeId] = socket.id;
+        calleeId = calleeObject.calleeId;
+        console.log('Available for calls  :  ' + calleeId);
+
+        var existing = self._connections[calleeId];
+
+        if (existing) {
+          sockets[existing].disconnect();
+        }
+
+        self._connections[calleeId] = socket.id;
+        startPing();
       });
 
       socket.on('disconnect', function(){
         var id = socket.id;
-        _.each(self._connections, function (i, key) {
-          console.log('Unavailable for connections: ' + key);
-          if (id === self._connections[key]) {
-            delete self._connections[key];
-          }
-        });
+        clearInterval(counterId);
+        console.log('Unavailable for calls  :' + calleeId);
+        delete self._connections[calleeId];
+        delete sockets[id];
+        calleeId = null;
       });
+
+      socket.on('pong', function(){
+        pingEnd = Date.now();
+        console.log('ping ' + calleeId + ' takes ' + (pingEnd - pingStart) + 'ms');
+      }); 
     });
 
   },
@@ -85,6 +112,7 @@ _.extend(Server.prototype, {
   _connectByWebSocket: function (callObject, reply) {
     
     var socketId = this._connections[callObject.calleeId];
+    console.log('Connecting by websocket ' + socketId + ' ' + JSON.stringify(callObject));
     if (socketId) {
 
       this._io.to(socketId).emit('incoming_call', callObject);

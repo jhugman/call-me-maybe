@@ -19,29 +19,32 @@ _.extend(Controller.prototype, {
     this.$native = $native;
   },
 
-  _createWebSocket: function () {
+  _createWebSocket: function (calleeId) {
     var self = this, 
         socket = this._socket = io();
 
     socket.on('connect', function (){
       console.log('connecting');
+      socket.emit('listening_for_calls', {calleeId: calleeId});
     });
     socket.on('incoming_call', function (callObject){
       console.log('callEvent: ' + JSON.stringify(callObject));
       self.$native.displayCallAlert(callObject);
     });
+    socket.on('ping', function (){
+      socket.emit('pong');
+    });
     socket.on('disconnect', function (){
       console.log('disconnecting');
+      self._createWebSocket(calleeId);
     });
-
   },
 
 
   login: function login (form, reply) {
     var self = this;
     apiUtils.post('LOGIN', '/login', form, form, options, function () {
-      self._createWebSocket();
-      self._socket.emit('listening_for_calls', { calleeId: form.calleeId });
+      self._createWebSocket(form.calleeId);
       reply.apply(null, arguments);
     }, false);
   },
