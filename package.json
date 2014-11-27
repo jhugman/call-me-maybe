@@ -48,6 +48,7 @@
     "build-facets": "jhugman/build-facets",
     "grunt-express-server": "~0.4.19",
     "grunt-nodemon": "~0.3.0",
-    "grunt-concurrent": "~1.0.0"
+    "grunt-concurrent": "~1.0.0",
+    "grunt-cli": "~0.1.13"
   }
 }
