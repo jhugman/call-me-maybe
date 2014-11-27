@@ -3,7 +3,7 @@
 var _ = require('lodash'),
     connUtils = require('../../lib/connection-utils');
 
-function Server (app, config) {
+function Server (app, config, rendererer) {
   this._app = app;
   this._config = config;
 }

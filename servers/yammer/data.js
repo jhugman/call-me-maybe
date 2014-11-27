@@ -5,7 +5,7 @@ module.exports = {
   groups: {
     'Mozilla Executives': ['cbeard', 'mbaker', 'mreid', 'kborchardt'],
     'PDX Stickers': ['pdx-stickers'],
-    'PDX Birds': ['birders@oregan.gov'],
+    'PDX Birds': ['birders@oregon.gov'],
   },
 
   people: {

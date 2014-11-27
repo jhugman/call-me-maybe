@@ -25,7 +25,9 @@
     "opentok": "~2.2.4",
     "connect": "~3.3.3",
     "express": "~4.10.3",
-    "body-parser": "~1.9.3"
+    "body-parser": "~1.9.3",
+    "socket.io": "~1.2.1",
+    "socket.io-client": "~1.2.1"
   },
   "devDependencies": {
     "browserify": "~3.14.1",

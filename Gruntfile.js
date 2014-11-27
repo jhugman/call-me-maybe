@@ -21,8 +21,8 @@ module.exports = function(grunt){
       options: {
         jshintrc: '.jshintrc'
       },
-      client: ['client/**/*.js'],
-      server: ['lib/**/*.js', 'test/*/**.js'],
+      client: ['client/**/*.js', 'lib/**/*.js'],
+      server: ['lib/**/*.js', 'test/**/*.js', 'servers/**/*.js'],
       project: ['**/*.js', '!client/**/*.js', '!lib/**/*.js', '!test/*/**.js']
     },
 
@@ -82,7 +82,11 @@ module.exports = function(grunt){
           { flatten: true, expand: true, src: ['views/*'], dest: '<%=dist.dir%>/views', filter: 'isFile' },
         ]
       },
-      cordova: {       
+
+      server: {
+        files: [
+          { flatten: true, expand: true, src: ['views/*'], dest: '<%=dist.dir%>/views', filter: 'isFile' },
+        ]
       }
     },
 
@@ -98,7 +102,7 @@ module.exports = function(grunt){
     nodemon: {
       dev: {
         script: './lib/app.js',
-        watch: ['lib/**', '!client/**']
+        watch: ['lib/**', 'servers/**', 'views/**']
       }
     },
 
@@ -200,11 +204,11 @@ module.exports = function(grunt){
   ]);
 
   grunt.registerTask('build-client',[
-    'jshint:client', 'node_tap', 'clean:client', 'browserify', 'stylus', 'copy:client', '_build-extras'
+    'jshint:client', 'clean:client', 'browserify', 'stylus', 'copy:client', '_build-extras'
   ]);
 
   grunt.registerTask('build-server', [
-    'jshint:server', 'node_tap'
+    'jshint:server', 'copy:server',
   ]);
 
   grunt.registerTask('build-project', [
