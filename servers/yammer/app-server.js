@@ -62,33 +62,50 @@ _.extend(Server.prototype, {
       sockets[socket.id] = socket;
 
       function startPing () {
+        if (counterId) {
+          clearInterval(counterId);
+        }
         counterId = setInterval(function () {
           pingStart = Date.now();
+
+          if (calleeId && socket.id !== self._connections[calleeId]) {
+            clearInterval(counterId);
+            socket.disconnect();
+            return;
+          }
+
           socket.emit('ping');
+
         }, 10 * 1000);
       }
 
       socket.on('listening_for_calls', function (calleeObject) {
         calleeId = calleeObject.calleeId;
-        console.log('Available for calls  :  ' + calleeId);
 
         var existing = self._connections[calleeId];
+        self._connections[calleeId] = socket.id;
 
-        if (existing) {
+        if (existing && existing !== socket.id) {
           sockets[existing].disconnect();
         }
 
-        self._connections[calleeId] = socket.id;
-        startPing();
+        if (!existing) {
+          console.log('Available for calls  :  ' + calleeId);
+          startPing();
+        }
+
       });
 
       socket.on('disconnect', function(){
         var id = socket.id;
+        if (id === self._connections[calleeId]) {
+          console.log('Unavailable for calls  :' + calleeId);
+          counterId = null;
+          delete self._connections[calleeId];
+          calleeId = null;
+        }
         clearInterval(counterId);
-        console.log('Unavailable for calls  :' + calleeId);
-        delete self._connections[calleeId];
         delete sockets[id];
-        calleeId = null;
       });
 
       socket.on('pong', function(){
@@ -119,7 +136,7 @@ _.extend(Server.prototype, {
       reply(null, 'CONNECTING');
       return;
     }
-    reply('not logged in');
+    reply('NOT_LOGGED_IN');
   }
 
 });

@@ -1,26 +1,13 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    
-    <link href="/css/demos.css" type="text/css" rel="stylesheet" >
+     <link rel='stylesheet' href='/a/style.css'/>
   </head>
   <body>
+    <div id='state'>
+      <button id='startOldDemo'>Start</button>
+    </div>
     <script src="//static.opentok.com/webrtc/v2.2/js/opentok.min.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" charset="utf-8">
-      OT.setLogLevel(OT.DEBUG);
-
-      // Replace with your API key (see https://dashboard.tokbox.com/projects)
-      // and a valid session ID (see http://tokbox.com/opentok/tutorials/create-session/):
-      var session = OT.initSession(1127, "1_MX4xMTI3fn4xNDE3MDQ4NzAyNTg2fjhVTmNHb3QxN3ZJVWx0NUx6TzVmMHU4UX5-");
-      session.on("streamCreated", function (event) {
-        session.subscribe(event.stream);
-      });
-      // Replace with a valid token.
-      // See http://tokbox.com/opentok/tutorials/create-token/
-      session.connect("T1==cGFydG5lcl9pZD0xMTI3JnNpZz1jZTYxYTVmNTA5MWJiOTA2ODE4N2Y2NDBmN2MyYmZlNmYzODQ5MzhlOnNlc3Npb25faWQ9MV9NWDR4TVRJM2ZuNHhOREUzTURRNE56QXlOVGcyZmpoVlRtTkhiM1F4TjNaSlZXeDBOVXg2VHpWbU1IVTRVWDUtJmNyZWF0ZV90aW1lPTE0MTcwNDg3MzAmbm9uY2U9MjcwNzEzJnJvbGU9cHVibGlzaGVy", function (error) {
-         publisher = OT.initPublisher();
-         session.publish(publisher);
-      });
-    </script>
+    <script src="/a/app.min.js"></script>
   </body>
 </html>

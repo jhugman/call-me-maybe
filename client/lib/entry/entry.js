@@ -52,14 +52,26 @@ var collectForm = function (parentSelector, childIds) {
   return data;
 };
 
+
+////////////////////////////////////////////
+var extensionController;
 var presentation = {
   displayCallAlert: function (callObject) {
     state.start('interruption-started');
-    window.confirm(callObject.callerId + ' is calling. Pickup?');
+    if (window.confirm(callObject.callerId + ' is calling. Pickup?')) {
+      state.start('connected');
+      extensionController.acceptCall(callObject, function (err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(data);
+        }
+      });
+    }
   },
 };
 
-var extensionController = new Controller(presentation);
+extensionController = new Controller(presentation);
 
 var uiState = {};
 
@@ -73,11 +85,12 @@ var listeners = {
       callerId: uiState.username,
     };
 
-    extensionController.requestCall(callObject, function (err) {
+    extensionController.requestCall(callObject, function (err, data) {
+      console.log('Call request unsuccessful');
       if (!err) {
         console.log('Call request granted successfully');
+        extensionController.joinSession(data.apiToken, data.sessionId, data.token);
       }
-      console.log('call request error: ' + err);
     });
   },
 
@@ -108,7 +121,18 @@ var listeners = {
       });
   },
 
+  'button#startOldDemo': function () {
+    // Replace with your API key (see https://dashboard.tokbox.com/projects)
+    // and a valid session ID (see http://tokbox.com/opentok/tutorials/create-session/):
+    var apiToken = 1127;
+    var sessionId = "1_MX4xMTI3fn4xNDE3MDQ4NzAyNTg2fjhVTmNHb3QxN3ZJVWx0NUx6TzVmMHU4UX5-";
 
+    // Replace with a valid token.
+    // See http://tokbox.com/opentok/tutorials/create-token/
+    var token = "T1==cGFydG5lcl9pZD0xMTI3JnNpZz1jZTYxYTVmNTA5MWJiOTA2ODE4N2Y2NDBmN2MyYmZlNmYzODQ5MzhlOnNlc3Npb25faWQ9MV9NWDR4TVRJM2ZuNHhOREUzTURRNE56QXlOVGcyZmpoVlRtTkhiM1F4TjNaSlZXeDBOVXg2VHpWbU1IVTRVWDUtJmNyZWF0ZV90aW1lPTE0MTcwNDg3MzAmbm9uY2U9MjcwNzEzJnJvbGU9cHVibGlzaGVy";
+    
+    extensionController.joinSession(apiToken, sessionId, token);
+  },
 };
 
 state.start('loggedOut');
