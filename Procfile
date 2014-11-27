@@ -1,1 +1,1 @@
-web: NAMESPACE=mozilla node lib/app.js
+web: NAMESPACE=yammer node lib/app.js
