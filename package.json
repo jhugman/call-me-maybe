@@ -27,7 +27,8 @@
     "express": "~4.10.3",
     "body-parser": "~1.9.3",
     "socket.io": "~1.2.1",
-    "socket.io-client": "~1.2.1"
+    "socket.io-client": "~1.2.1",
+    "cors": "~2.5.2"
   },
   "devDependencies": {
     "browserify": "~3.14.1",

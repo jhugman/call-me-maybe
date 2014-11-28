@@ -2,18 +2,40 @@
 
 
 module.exports = function(grunt){
-  var conf = require('build-facets')(__dirname)
-            .loadRules('./config/server-facets.js')
-            .loadConfiguration('./config/build-config.js');
+  var path = require('path');
 
-  var themeFile = conf.get('theme');
+  var config = require('build-facets')(__dirname)
+            .loadRules('./config/server-facets.js')
+            .loadConfiguration('./config/build-config.js')
+            .loadConfiguration('./config/deploy-config.js');
+
+  config = config.loadConfiguration(config.resolve('namespace-dir', 'basic-info'));
+
+
+
+  var themeFile = config.get('theme');
+
+
+  var platformCode = config.buildVariant['namespace'];
+  var distDir = path.resolve(config.resolve('project-dir', 'dist-relative'), platformCode),
+      assetsDir = path.join(distDir, config.get('assets-relative')),
+      assembleDir = assetsDir;
+
+  var browserifyFiles = {};
+  // should use '<%=dist.build%>'
+  // the rest of the modules will be lazily discovered.
+  browserifyFiles[path.join(assembleDir, '/app.min.js')] = ['client/lib/entry/*.js'];
+
+  var stylusFiles = {};
+  stylusFiles[path.join(assembleDir, '/style.css')] = [themeFile];
+
 
   grunt.initConfig({
     dist: {
       build: 'build',
-      assemble: 'build/assemble',
-      dir: conf.resolve('project-dir', 'dist-relative'),
-      assets: conf.resolve('project-dir', 'dist-relative', 'assets-relative'),
+      assemble: assembleDir, // this is really hard to change.
+      dir: distDir,
+      assets: assetsDir,
       theme: themeFile
     },
 
@@ -41,11 +63,7 @@ module.exports = function(grunt){
 
     browserify: {
       dist: {
-        files: {
-          // should use '<%=dist.build%>'
-          // the rest of the modules will be lazily discovered.
-          'build/assemble/app.min.js': ['client/lib/entry/*.js']
-        }
+        files: browserifyFiles
       },
       options: {
         debug: true
@@ -55,9 +73,7 @@ module.exports = function(grunt){
     stylus: {
       compile: {
         paths: ['client/style'],
-        files: {
-          'build/assemble/style.css': [themeFile]
-        }
+        files: stylusFiles
       }
     },
 
@@ -67,25 +83,24 @@ module.exports = function(grunt){
       },
       client: {
         force: true,
-        src: [ '<%=dist.dir%>', '<%=dist.assemble%>', '<%=dist.build%>' ]
+        src: [ '<%=dist.dir%>' ]
       }
     },
 
     copy: {
       client: {
         files: [
-          { expand: true, dot: true, cwd: 'build/assemble', src: [ '**' ], dest: '<%=dist.assets%>' },
-          { flatten: false, expand: true, cwd: 'resources', src: conf.get('resources-common'), dest: '<%=dist.assets%>' },
-          { flatten: false, expand: true, cwd: 'resources', src: conf.get('resources-specific'), dest: '<%=dist.assets%>' },
+          
+          { flatten: false, expand: true, cwd: 'resources', src: config.get('resources-common'), dest: '<%=dist.assets%>' },
+          { flatten: false, expand: true, cwd: 'resources', src: config.get('resources-specific'), dest: '<%=dist.assets%>' },
           
           //{ flatten: true, expand: true, src: ['node_modules/x-tag-core/dist/x-tag-core.js'], dest: '<%=dist.dir%>' },
-          { flatten: true, expand: true, src: ['views/*'], dest: '<%=dist.dir%>/views', filter: 'isFile' },
+          
         ]
       },
 
       server: {
         files: [
-          { flatten: true, expand: true, src: ['views/*'], dest: '<%=dist.dir%>/views', filter: 'isFile' },
         ]
       }
     },
@@ -139,10 +154,10 @@ module.exports = function(grunt){
 
     shell: {
       runNative: {
-        command: conf.get('run-command'),
+        command: config.get('run-command'),
         options: {
           execOptions: {
-            cwd: conf.resolve('project-dir')
+            cwd: config.resolve('project-dir')
           }
         }
       }
@@ -197,7 +212,7 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-concurrent');
 
-  grunt.registerTask('_build-extras', conf.get('extra-build-tasks'));  
+  grunt.registerTask('_build-extras', config.get('extra-build-tasks'));  
 
   grunt.registerTask('default',[
     'build-project', 'concurrent'

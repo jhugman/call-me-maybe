@@ -1,7 +1,9 @@
 module.exports = {
-  'project-dir': {
-    '': '.'
-  },
+
+  'basic-info': 'info.js',
+
+  'project-dir': '.',
+  
   'dist-relative': {
     '': 'build/dist',
   },
@@ -19,11 +21,6 @@ module.exports = {
 
   'resources-specific': {
     '': [],
-  },
-
-  'theme': {
-    'yammer': 'client/style/yammer-theme.styl',
-    'owncloud': 'client/style/yammer-theme.styl',
   },
 
   // grunt tasks we call depending on build variant.

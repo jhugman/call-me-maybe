@@ -1,8 +1,8 @@
 module.exports = {
-  'title': 'Owncloud',
+  'title': 'Mozilla',
   // Should tie up with domain-mappings.js
-  'domain': 'owncloud.com',
-  'server-port': '8082',
+  'domain': 'mozilla.com',
+  'server-port': '8081',
   'bind-address': 'localhost',
   'theme': 'client/style/mozilla-theme.styl',
 };

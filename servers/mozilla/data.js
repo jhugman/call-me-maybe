@@ -27,7 +27,7 @@ module.exports = {
       whitelist: ['daisy@disney.com'],
       blacklist: [],
 
-      forwardTo: 'bwalker@owncloud.com',
+      forwardTo: 'bill@hello.firefox.com',
 
       rules: function (me, they) {
         return me.approvesIf(they.areMyFriend(), 'high')

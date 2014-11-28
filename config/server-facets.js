@@ -1,3 +1,3 @@
 module.exports = {
-  namespace: ['yammer', 'mozilla', 'owncloud'],
+  namespace: ['mozilla', 'hello', 'owncloud'],
 };

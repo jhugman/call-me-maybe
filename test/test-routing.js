@@ -8,10 +8,10 @@ route.options.domains = require('../config/domain-mappings');
 
 test('Basic routing to same network', function (t) {
   route({
-    calleeId: 'bwalker@yammer.com',
-    callerId: 'jhugman@yammer.com',
+    calleeId: 'bwalker@mozilla.com',
+    callerId: 'jhugman@mozilla.com',
     sessionId: 'ABCDEF',
-    sessionHost: 'http://yammer.com/webrtc/ABCDEF'
+    sessionHost: 'http://mozilla.com/webrtc/ABCDEF'
   }, function (err, data) {
     if (err) {
       console.log('Error: ' + err);

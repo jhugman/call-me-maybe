@@ -2,7 +2,7 @@
 
 module.exports = {
   people: {
-    bwalker: {
+    bill: {
 
       rules: function (me, they, call) {
         return me.approvesIf(they.areWhitelisted(), 'high')
