@@ -4,7 +4,8 @@
   "description": "Caller-callee find and connect semantics for WebRTC",
   "main": "index.js",
   "scripts": {
-    "test": "tap test/test-*.js"
+    "test": "tap test/test-*.js",
+    "postinstall": "NAMESPACE=yammer node_modules/.bin/grunt build-project"
   },
   "repository": {
     "type": "git",
@@ -48,6 +49,7 @@
     "build-facets": "jhugman/build-facets",
     "grunt-express-server": "~0.4.19",
     "grunt-nodemon": "~0.3.0",
-    "grunt-concurrent": "~1.0.0"
+    "grunt-concurrent": "~1.0.0",
+    "grunt-cli": "~0.1.13"
   }
 }
