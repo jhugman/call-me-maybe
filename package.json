@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "tap test/test-*.js",
-    "postinstall": "NAMESPACE=yammer node_modules/.bin/grunt build-project"
+    "build:mozilla": "NAMESPACE=mozilla node_modules/.bin/grunt build-project",
+    "build:hello": "NAMESPACE=hello node_modules/.bin/grunt build-project",
+    "build:yammer": "NAMESPACE=yammer node_modules/.bin/grunt build-project"
   },
   "repository": {
     "type": "git",
