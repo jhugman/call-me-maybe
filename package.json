@@ -11,6 +11,12 @@
     "build:hello": "NAMESPACE=hello node_modules/.bin/grunt build-project",
     "build:yammer": "NAMESPACE=yammer node_modules/.bin/grunt build-project"
   },
+  "overidify": "./config/server-facets.js",
+  "browserify": {
+    "transform": [
+      "overidify"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/jhugman/call-me-maybe.git"
@@ -52,7 +58,10 @@
     "grunt-express-server": "~0.4.19",
     "grunt-nodemon": "~0.3.0",
     "grunt-concurrent": "~1.0.0",
-    "grunt-cli": "~0.1.13"
+    "grunt-cli": "~0.1.13",
+
+    "overidify": "jhugman/overidify"
+
   },
   "devDependencies": {
   }
