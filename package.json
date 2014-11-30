@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "tap test/test-*.js",
+    "build": "node_modules/.bin/grunt build-project",
+    "start": "node lib/app.js",
     "build:mozilla": "NAMESPACE=mozilla node_modules/.bin/grunt build-project",
     "build:hello": "NAMESPACE=hello node_modules/.bin/grunt build-project",
     "build:yammer": "NAMESPACE=yammer node_modules/.bin/grunt build-project"
