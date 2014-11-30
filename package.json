@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tap test/test-*.js",
-    "postinstall": "npm run build:moz",
+    "postinstall": "npm run build:hello",
     "build:yammer": "NAMESPACE=yammer node_modules/.bin/grunt build-project",
     "build:moz": "NAMESPACE=mozilla node_modules/.bin/grunt build-project",
     "build:hello": "NAMESPACE=hello node_modules/.bin/grunt build-project"

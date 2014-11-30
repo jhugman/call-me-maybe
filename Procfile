@@ -1,1 +1,1 @@
-web: NAMESPACE=mozilla node lib/app.js
+web: NAMESPACE=hello node lib/app.js
