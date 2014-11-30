@@ -1,1 +1,1 @@
-web: NAMESPACE=yammer node lib/app.js
+web: NAMESPACE=hello node_modules/.bin/grunt build-project && node lib/app.js
