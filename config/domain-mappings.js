@@ -1,5 +1,5 @@
 module.exports = {
-  'hello.firefox.com': 'localhost:8080',
-  'mozilla.com': 'localhost:8081',
+  'hello.firefox.com': 'hello.allou.is',
+  'mozilla.com': 'moz.allou.is',
   'owncloud.com': 'localhost:8082'
 };
