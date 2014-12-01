@@ -59,10 +59,9 @@
     "grunt-nodemon": "~0.3.0",
     "grunt-concurrent": "~1.0.0",
     "grunt-cli": "~0.1.13",
-
-    "overidify": "jhugman/overidify"
-
+    "overidify": "jhugman/overidify",
+    "node-gcm": "~0.9.12",
+    "c2dm": "~1.2.1"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

@@ -122,7 +122,7 @@ An Example
 ----------
   * Alf is trying to get a message to Chloe but doesn't know how to call her.
   * 'Chloe' is the name Alf knows her as.
-  * Alf knows a contact friend, Betty who can help.
+  * Alf knows a mutual acquaintance, Betty who can help.
   * Betty can:
     - take Alf's number and pass it to Chloe.
     - take Alf's number and decide (for whatever reason), not pass it to Chloe.

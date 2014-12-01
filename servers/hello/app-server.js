@@ -9,7 +9,8 @@ function Server (app, config, rendererer) {
 
   this._extensionTemplate = rendererer('extension.html');
 
-
+  this._registerTemplate = rendererer('register.html');
+  
   this._connections = {};
 }
 
@@ -42,10 +43,57 @@ _.extend(Server.prototype, {
     });
 
     app.post('/logout', function (req, res) {
-      console.log('extension/login');
+      console.log('extension/logout');
       var data = req.body;
       res.status(200).send("LOGIN OK");
     });
+
+    /*********************************************************************/
+      // C2DM stuff
+    /*********************************************************************/
+
+    function registerForC2DM (data, res) {
+      if (!data.id || !data.calleeId) {
+        res.status(400).send("You sent: " + JSON.stringify(data));
+      }
+
+      self._c2dmIds[data.calleeId] = data.id;
+      
+      res.status(200).send("LOGIN OK");      
+    }
+
+    app.post('/hello-android', function (req, res) {
+      console.log('POST /hello-android');
+      var data = req.body;
+      registerForC2DM(data, res);
+    });
+
+    app.get('/hello-android/:calleeId/:id', function (req, res) {
+      console.log('GET /hello-android');
+      var data = {
+        calleeId: req.params.calleeId,
+        id: req.params.id,
+      };
+      registerForC2DM(data, res);
+    });
+
+    app.get('/hello-android/:calleeId/:id', function (req, res) {
+      console.log('GET /hello-android');
+      var data = {
+        calleeId: req.params.calleeId,
+        id: req.params.id,
+      };
+      registerForC2DM(data, res);
+    });
+
+
+    var C2DM = require('c2dm').C2DM;
+    this._c2dm = new C2DM({
+      token: this._config.get('c2dm-auth')
+    });
+
+    this._c2dmIds = {};
+
 
     /*********************************************************************/
       // Web sockets stuff
@@ -137,7 +185,26 @@ _.extend(Server.prototype, {
       return;
     }
     reply('NOT_LOGGED_IN');
+  },
+
+  _connectByC2DM: function (device, callObject, recommendation, reply) {
+    var message = {
+      registration_id: '',
+      collapse_key: 'Collapse key', // required
+      'data.key1': 'value1',
+      'data.key2': 'value2',
+      delay_while_idle: '1' // remove if not needed
+    };
+
+    this._c2dm.send(message, function(err, messageId){
+      if (err) {
+        console.log("Something has gone wrong!");
+      } else {
+        console.log("Sent with message ID: ", messageId);
+      }
+    });
   }
+
 
 });
 

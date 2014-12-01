@@ -80,6 +80,12 @@ var listeners = {
   'button#dial': function (e) {
     console.log('dial');
     var form = collectForm('#dialBox', 'calleeId');
+
+    var calleeId = form.calleeId;
+    if (calleeId.indexOf('@') < 0) {
+      calleeId += '@' + form.domain;
+    }
+
     var callObject = {
       calleeId: form.calleeId,
       callerId: uiState.username,
@@ -97,12 +103,33 @@ var listeners = {
   'button#login': function (e) {
     console.log('login');
     var form = collectForm('#loginBox', 'callerId', 'password', 'domain');
-    state.toggle('loggedOut', 'loggedIn');
     uiState.username = form.callerId;
+    state.toggle('loggedOut', 'loggedIn');
   },
 
-  'button#loginForRealz': function (e) {
-    console.log('loginForRealz');
+  'button#loginForWebsocket': function (e) {
+    console.log('loginForWebsocket');
+    var form = collectForm('#loginBox', 'calleeId', 'password', 'domain');
+    var callObject = {
+      calleeId: form.calleeId + '@' + form.domain,
+      password: form.password
+    };
+
+    uiState.username = callObject.calleeId;
+    
+
+    extensionController.login(
+      callObject, 
+      function (err, data) {
+        if (!err) {
+          state.toggle('loggedOut', 'loggedIn');
+        }
+      });
+  },
+
+
+  'button#loginForC2DM': function (e) {
+    console.log('loginForC2DM');
     var form = collectForm('#loginBox', 'calleeId', 'password', 'domain');
     var callObject = {
       calleeId: form.calleeId + '@' + form.domain,

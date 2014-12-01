@@ -1,4 +1,4 @@
 module.exports = {
   namespace: ['mozilla', 'hello', 'owncloud'],
-  env: ['prod', 'dev'],
+  config_env: ['prod', 'dev'],
 };
