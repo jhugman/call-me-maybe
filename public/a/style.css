@@ -1,0 +1,5 @@
+#state.loggedOut .loggedOut{display:block}
+#state .loggedOut{display:none}
+#state.loggedIn .loggedIn{display:block}
+#state .loggedIn{display:none}
+h1{color:#008000}
