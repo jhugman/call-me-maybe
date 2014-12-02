@@ -55,9 +55,17 @@ _.extend(Server.prototype, {
     function registerForC2DM (data, res) {
       if (!data.id || !data.calleeId) {
         res.status(400).send("You sent: " + JSON.stringify(data));
+        return;
       }
 
-      self._c2dmIds[data.calleeId] = data.id;
+      var calleeId = data.calleeId;
+      if (calleeId.indexOf('@') < 0) {
+        // not sure what to append.
+      }
+
+      console.log("Registering " + calleeId + ' for C2DM');
+
+      self._c2dmIds[calleeId] = data.id;
       
       res.status(200).send("LOGIN OK");      
     }
@@ -88,6 +96,7 @@ _.extend(Server.prototype, {
 
 
     var C2DM = require('c2dm').C2DM;
+    
     this._c2dm = new C2DM({
       token: this._config.get('c2dm-auth')
     });
@@ -130,6 +139,10 @@ _.extend(Server.prototype, {
       socket.on('listening_for_calls', function (calleeObject) {
         calleeId = calleeObject.calleeId;
 
+        if (!calleeId) {
+          return;
+        }
+
         var existing = self._connections[calleeId];
         self._connections[calleeId] = socket.id;
 
@@ -168,7 +181,8 @@ _.extend(Server.prototype, {
 
   connector: function (device, callObject, recommendation, reply) {
     var connections = {
-      'connect': Server.prototype._connectByWebSocket.bind(this)
+      'connect': Server.prototype._connectByWebSocket.bind(this),
+      'device': Server.prototype._connectByC2DM.bind(this),
     };
 
     connUtils.connect(device, connections, callObject, recommendation, reply);
@@ -177,9 +191,8 @@ _.extend(Server.prototype, {
   _connectByWebSocket: function (callObject, reply) {
     
     var socketId = this._connections[callObject.calleeId];
-    console.log('Connecting by websocket ' + socketId + ' ' + JSON.stringify(callObject));
-    if (socketId) {
-
+    if (socketId && ('' + socketId) !== 'undefined') {
+      console.log('Connecting by websocket ' + socketId + ' ' + JSON.stringify(callObject));
       this._io.to(socketId).emit('incoming_call', callObject);
       reply(null, 'CONNECTING');
       return;
@@ -187,20 +200,28 @@ _.extend(Server.prototype, {
     reply('NOT_LOGGED_IN');
   },
 
-  _connectByC2DM: function (device, callObject, recommendation, reply) {
+  _connectByC2DM: function (callObject, reply) {
+    if (!this._c2dmIds[callObject.calleeId]) {
+      reply('NOT_CONNECTED');
+    }
+    var regId = this._c2dmIds[callObject.calleeId];
+    console.log('Connecting by c2dm ' + regId + ' ' + JSON.stringify(callObject));
     var message = {
-      registration_id: '',
+      registration_id: regId,
       collapse_key: 'Collapse key', // required
       'data.key1': 'value1',
       'data.key2': 'value2',
-      delay_while_idle: '1' // remove if not needed
+      delay_while_idle: '0', // remove if not needed
+      time_to_live: 0,
     };
 
-    this._c2dm.send(message, function(err, messageId){
+    this._c2dm.send(message, function(err, messageId) {
       if (err) {
-        console.log("Something has gone wrong!");
+        console.log("C2DM: Something has gone wrong: " + err);
+        reply('NOT_CONNECTED');
       } else {
-        console.log("Sent with message ID: ", messageId);
+        console.log("C2DM: Sent with message ID: ", messageId);
+        reply(null, 'CONNECTED_C2DM');
       }
     });
   }

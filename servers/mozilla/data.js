@@ -21,6 +21,30 @@ module.exports = {
       },
     },
 
+    fab: {
+      friends: ['james'],
+      rules: function (me, they) {
+        return me.approvesIf(they.areMyFriend(), 'high')
+               .or(they.areMemberOf('Mozilla Executives'), 'high')
+               .or(they.areMemberOf('PDX Stickers'), 'medium')
+
+               .connectIf('high')
+               .forwardIf('medium');
+      },
+    },
+
+    james: {
+      friends: ['fab'],
+      rules: function (me, they) {
+        return me.approvesIf(they.areMyFriend(), 'high')
+               .or(they.areMemberOf('Mozilla Executives'), 'high')
+               .or(they.areMemberOf('PDX Stickers'), 'medium')
+
+               .connectIf('high')
+               .forwardIf('medium');
+      },
+    },
+
     bwalker: {
       friends: ['digitarald', 'rfant', 'backslashn', 'jhugman'],
 
