@@ -24,10 +24,10 @@ module.exports = function(grunt){
   var browserifyFiles = {};
   // should use '<%=dist.build%>'
   // the rest of the modules will be lazily discovered.
-  browserifyFiles[path.join(assembleDir, '/app.min.js')] = ['client/lib/entry/*.js'];
+  browserifyFiles[path.join(__dirname, '/public/app.min.js')] = ['client/lib/entry/*.js'];
 
   var stylusFiles = {};
-  stylusFiles[path.join(assembleDir, '/style.css')] = [themeFile];
+  stylusFiles[path.join(__dirname, '/public/style.css')] = [themeFile];
 
 
   grunt.initConfig({
