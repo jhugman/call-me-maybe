@@ -54,13 +54,14 @@ var collectForm = function (parentSelector, childIds) {
 
 
 ////////////////////////////////////////////
+var uiState = {};
 var extensionController;
 var presentation = {
   displayCallAlert: function (callObject) {
     state.start('interruption-started');
     if (window.confirm(callObject.callerId + ' is calling. Pickup?')) {
       state.start('connected');
-      extensionController.acceptCall(callObject, function (err, data) {
+      extensionController.acceptCall(callObject, uiState.username, function (err, data) {
         if (err) {
           console.log(err);
         } else {
@@ -73,7 +74,6 @@ var presentation = {
 
 extensionController = new Controller(presentation);
 
-var uiState = {};
 
 ////////////////////////////////////////////
 var listeners = {
@@ -95,7 +95,7 @@ var listeners = {
       console.log('Call request unsuccessful');
       if (!err) {
         console.log('Call request granted successfully');
-        extensionController.joinSession(data.apiToken, data.sessionId, data.token);
+        extensionController.joinSession(data.apiToken, data.sessionId, data.token, uiState.username);
       }
     });
   },

@@ -5,34 +5,35 @@
     <link rel='stylesheet' href='/a/style.css'/>
   </head>
   <div id='state'>
-    
-    <h1><%= config.get('title') %> Browser Extension</h1>
+    <header>  
+      <h1><%= config.get('title') %> Browser Extension</h1>
+    </header>
 
     <div class='loggedOut' id='loginBox'>
       <div>
-        <label for='callerId'>Username</label>
-        <input type='text' id='calleeId'/>
-        <span class='domain'>@<%= config.get('domain') %></span>
+        <input placeholder="Username" type='text' id='calleeId'/>
         <input type='hidden' id='domain' value='<%= config.get("domain") %>'/>
       </div>
       <div>
-        <label for='password'>Password</label>
-        <input type='password' id='password' name='password'/>
+        <input placeholder="Password" type='password' id='password' name='password'/>
       </div>
       <button id='loginForWebsocket'>Log in</button>
 
     </div>
 
     <div class='loggedIn' id='dialBox'>
-      <label for='calleeId'>Call</label>
       <% if (!!calleeId) { %>
         <input type='input' name='calleeId' id='calleeId' value='<%= calleeId%>' disabled='true'/>
       <% } else { %>
-        <input type='input' name='calleeId' id='calleeId' />
+        <input placeholder="Address to call" type='input' name='calleeId' id='calleeId' />
       <% } %>
       <button id='dial'>Dial</button>
     </div>
     
+  </div>
+  <div id="call">
+    <div id="them"></div>
+    <div id="me"></div>
   </div>
   <script src="/a/app.min.js"></script>
   <script src="//static.opentok.com/webrtc/v2.2/js/opentok.min.js" type="text/javascript" charset="utf-8"></script>

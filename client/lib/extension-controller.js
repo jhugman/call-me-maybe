@@ -101,7 +101,7 @@ _.extend(Controller.prototype, {
 
   },
 
-  acceptCall: function (callObject, reply) {
+  acceptCall: function (callObject, username, reply) {
     var self = this;
     // (callType, actualDomain, serverPath, data, reply)
     apiUtils.postDirect('CALL_ACCEPT', callObject.sessionHost, null, callObject, function (err, data) {
@@ -110,22 +110,29 @@ _.extend(Controller.prototype, {
       }
       console.log('extension-controller.js: picked up OpenTok identifiers:');
       console.log(data);
-      self.joinSession(+data.apiToken, callObject.sessionId, data.token);
+      self.joinSession(+data.apiToken, callObject.sessionId, data.token, username);
     });
   },
 
-  joinSession: function (apiToken, sessionId, token) {
+  joinSession: function (apiToken, sessionId, token, username) {
     console.log('Joining OpenTok api:' + apiToken + ' sessionId: ' + sessionId + ' token: ' + token);
 
     var OT = (global || window).OT;
     OT.setLogLevel(OT.DEBUG);
     var session = OT.initSession(apiToken, sessionId);
     session.on("streamCreated", function (event) {
-      session.subscribe(event.stream);
+      session.subscribe(event.stream, 'them', {
+        width: 800,
+        height: 600
+      });
     });
     
     session.connect(token, function (error) {
-      var publisher = OT.initPublisher();
+      var publisher = OT.initPublisher('me', {
+        width: 200,
+        height: 150,
+        name: username
+      });
       session.publish(publisher);
     });
   }
